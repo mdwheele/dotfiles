@@ -1,16 +1,22 @@
-[[ -s ~/.profile ]] && source ~/.profile
+# Enable Bash Completions
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
-export BASH_SILENCE_DEPRECATION_WARNING=1
+# Per-project NPM Commands
+PATH="$PATH:node_modules/.bin"
 
-complete -C /usr/local/bin/terraform terraform
+# Docker Machine Environment
+if command -v docker-machine > /dev/null; then
+  # fetch the first running machine name
+  machine=$(docker-machine ls | grep "Running" | head -n 1 | awk '{ print $1 }')
+  if [ "$machine" != "" ]; then
+    eval "$(docker-machine env $machine)"
+  fi
+fi
 
-export CLOUDSDK_PYTHON=/usr/bin/python3 
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/dustin.wheeler/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/dustin.wheeler/Downloads/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/dustin.wheeler/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/dustin.wheeler/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+# GPG YubiKey
+GPG_TTY=$(tty)
+export GPG_TTY
+export SSH_AUTH_SOCK=${HOME}/.gnupg/S.gpg-agent.ssh
 
 [ -f ~/.gpg-agent-info ] && source ~/.gpg-agent-info
 if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
@@ -18,6 +24,6 @@ if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
 else
    eval $( gpg-agent --daemon ) &
 fi
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
+# Aliases
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
