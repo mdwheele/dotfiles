@@ -14,16 +14,8 @@ if command -v docker-machine > /dev/null; then
 fi
 
 # GPG YubiKey
-GPG_TTY=$(tty)
-export GPG_TTY
-export SSH_AUTH_SOCK=${HOME}/.gnupg/S.gpg-agent.ssh
-
-[ -f ~/.gpg-agent-info ] && source ~/.gpg-agent-info
-if [ -S "${GPG_AGENT_INFO%%:*}" ]; then
-   export GPG_AGENT_INFO
-else
-   eval $( gpg-agent --daemon ) &
-fi
+gpgconf --launch gpg-agent
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Aliases
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
