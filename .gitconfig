@@ -6,12 +6,17 @@
 	gpgsign = true
 [alias]
 	assume = update-index --assume-unchanged
-	noassume = update-index --no-assume-unchanged
 	unassume = update-index --no-assume-unchanged
 	assumed = !git ls-files -v | grep ^h | cut -c 3-
 	enable-sig = config --global commit.gpgsign true
 	disable-sig = config --global commit.gpgsign false
 	branch-prune = "!git branch -v | grep '\\[gone]' | awk '{print $1}' | xargs -r git branch -D"
+	s = status
+	co = checkout
+	go = checkout -b
+	b = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+	wip = !git add -A && git commit -m "wip"
+	nah = !git reset --hard
 [fetch]
 	prune = true
 [core]
