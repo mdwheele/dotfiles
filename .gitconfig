@@ -3,7 +3,7 @@
 	email = dustin.wheeler@nutanix.com
 	signingkey = FD8D7BE7EA13F6EF6010C506978456502668DD1E
 [commit]
-	gpgsign = true
+	gpgsign = false
 [alias]
 	assume = update-index --assume-unchanged
 	unassume = update-index --no-assume-unchanged
